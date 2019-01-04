@@ -21,6 +21,21 @@ class KnpDisqusExtension extends Extension
 {
     public function load(array $configs, ContainerBuilder $container)
     {
+        // Set configs dynamically
+        if ($container->hasParameter('uvdesk.knp_disqus.api_key')) {
+            $configs[0]['api_key'] = $container->getParameter('uvdesk.knp_disqus.api_key');
+        }
+
+        if ($container->hasParameter('uvdesk.knp_disqus.secret_key')) {
+            $configs[0]['secret_key'] = $container->getParameter('uvdesk.knp_disqus.secret_key');
+        }
+
+        if ($container->hasParameter('uvdesk.knp_disqus.forums')) {
+            $configs[0]['forums']['uvdesk'] = [
+                'shortname' => $container->getParameter('uvdesk.knp_disqus.forums')
+            ];
+        }
+
         $processor = new Processor();
         $configuration = new Configuration($container->getParameter('kernel.debug'));
         $config = $processor->processConfiguration($configuration, $configs);
